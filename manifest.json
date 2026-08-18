@@ -1,0 +1,10 @@
+{
+  "name": "Daymon Bull · Entregas",
+  "short_name": "Daymon Bull",
+  "description": "Plantilla para crear historias de entregas de Daymon Bull.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "orientation": "portrait"
+}

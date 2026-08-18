@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#050505">
+<title>Daymon Bull — Plantilla de entregas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600&display=swap');
+
+  :root{
+    --gold:#C99A2E;
+    --black:#050505;
+    --white:#F7F5F0;
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:#222;
+    color:#fff;
+    font-family:Montserrat,Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:24px;
+  }
+
+  .workspace{
+    display:flex;
+    gap:28px;
+    align-items:flex-start;
+    max-width:1280px;
+    width:100%;
+  }
+
+  .controls{
+    width:330px;
+    background:#111;
+    border:1px solid #2a2a2a;
+    border-radius:16px;
+    padding:22px;
+    position:sticky;
+    top:20px;
+  }
+
+  .controls h1{
+    margin:0 0 6px;
+    font-size:18px;
+    font-weight:600;
+  }
+
+  .controls p{
+    margin:0 0 20px;
+    color:#aaa;
+    font-size:12px;
+    line-height:1.5;
+  }
+
+  label{
+    display:block;
+    font-size:12px;
+    color:#bbb;
+    margin:15px 0 7px;
+  }
+
+  input[type="text"],
+  input[type="file"]{
+    width:100%;
+    border:1px solid #383838;
+    background:#191919;
+    color:#fff;
+    border-radius:9px;
+    padding:11px 12px;
+    font:inherit;
+    font-size:13px;
+  }
+
+  input[type="file"]{
+    width:100%;
+    padding:9px;
+    font-size:13px;
+  }
+
+  .native-file-input{
+    display:block;
+    width:100%;
+    min-height:48px;
+    padding:10px;
+    border:1px solid #383838;
+    border-radius:9px;
+    background:#191919;
+    color:#fff;
+    font-size:14px;
+    cursor:pointer;
+    -webkit-appearance:auto;
+    appearance:auto;
+  }
+
+  button{
+    width:100%;
+    margin-top:18px;
+    border:0;
+    border-radius:9px;
+    padding:13px;
+    min-height:46px;
+    background:var(--gold);
+    color:#080808;
+    font-weight:600;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+
+  button:disabled{
+    opacity:.65;
+    cursor:wait;
+  }
+
+  .secondary-button{
+    margin-top:8px;
+    background:#191919;
+    color:#fff;
+    border:1px solid #383838;
+  }
+
+  .photo-status{
+    margin-top:8px;
+    color:#aaa;
+    font-size:11px;
+    line-height:1.4;
+  }
+
+  .note{
+    margin-top:15px;
+    padding:11px;
+    border-radius:9px;
+    background:#181818;
+    color:#999;
+    font-size:11px;
+    line-height:1.45;
+  }
+
+  /* ===== PLANTILLA 1080 × 1920 ===== */
+  .story{
+    position:relative;
+    width:min(54vh, 540px);
+    aspect-ratio:9/16;
+    overflow:hidden;
+    background:#050505;
+    flex:none;
+  }
+
+  .photo{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
+
+  /* Logo original DBM: fijo en la esquina superior izquierda. */
+  .brand-logo{
+    position:absolute;
+    z-index:3;
+    top:2.65%;
+    left:8.8%;
+    width:74px;
+    height:auto;
+    display:block;
+  }
+
+  /* Este degradado queda FIJO en la plantilla.
+     No se modifica al cambiar de foto. */
+  .gradient{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(5,5,5,0) 56%,
+        rgba(5,5,5,.12) 63%,
+        rgba(5,5,5,.60) 72%,
+        rgba(5,5,5,.92) 79%,
+        rgba(5,5,5,1) 88%,
+        #050505 100%
+      );
+  }
+
+  .content{
+    position:absolute;
+    left:8.8%;
+    right:8.8%;
+    bottom:5.8%;
+    color:var(--white);
+  }
+
+  .phrase{
+    font-family:"Cormorant Garamond", Georgia, serif;
+    font-size:clamp(28px,5.0vw,48px);
+    line-height:.94;
+    letter-spacing:-.5px;
+    font-weight:500;
+    margin:0;
+    max-width:94%;
+  }
+
+  .phrase .gold{color:var(--gold)}
+
+  .divider{
+    width:68%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin-top:22px;
+    margin-bottom:23px;
+  }
+
+  .divider::before,
+  .divider::after{
+    content:"";
+    height:1px;
+    background:var(--gold);
+    flex:1;
+    opacity:.9;
+  }
+
+  .paw{
+    color:var(--gold);
+    font-size:18px;
+    line-height:1;
+    transform:translateY(-1px);
+    filter:grayscale(1) brightness(0) saturate(100%) invert(68%) sepia(48%) saturate(700%) hue-rotate(4deg) brightness(88%);
+  }
+
+  .location{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    font-family:Montserrat,Arial,sans-serif;
+    font-size:clamp(13px,2vw,18px);
+    line-height:1;
+    font-weight:500;
+    letter-spacing:.1px;
+    white-space:nowrap;
+  }
+
+  .pin{
+    width:24px;
+    height:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--gold);
+    line-height:1;
+    flex:none;
+    transform:translateY(1px);
+  }
+
+  .pin svg{
+    width:24px;
+    height:24px;
+    display:block;
+    fill:var(--gold);
+  }
+
+  .flag{
+    font-size:22px;
+    line-height:1;
+  }
+
+  @media(max-width:850px){
+    body{
+      padding:12px;
+      align-items:flex-start;
+    }
+    .workspace{
+      flex-direction:column;
+      align-items:center;
+      width:100%;
+      gap:16px;
+    }
+    .controls{
+      width:100%;
+      max-width:540px;
+      position:static;
+      order:1;
+    }
+    .story{
+      order:2;
+      width:min(100%,540px);
+      height:auto;
+    }
+    .controls h1{font-size:17px}
+    .controls p{font-size:11px}
+    input[type="text"],
+    input[type="file"],
+    button{
+      min-height:44px;
+      font-size:14px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="workspace">
+
+  <section class="controls">
+    <h1>Plantilla de entregas · Daymon Bull</h1>
+    <p>
+      La plantilla mantiene fijos el degradado, la posición, los tamaños,
+      la tipografía y la paleta. Solo cambia la fotografía, la frase y la ubicación.
+    </p>
+
+    <label for="photoInput">1. Incrustar fotografía</label>
+    <input id="photoInput" class="native-file-input" type="file" accept="image/*">
+    <button type="button" id="choosePhotoBtn" class="secondary-button">Elegir foto</button>
+    <div id="photoStatus" class="photo-status">Todavía no has seleccionado una foto.</div>
+
+    <label for="phraseWhiteInput">2. Frase en blanco</label>
+    <input id="phraseWhiteInput" type="text" value="Un nuevo hogar,">
+
+    <label for="phraseGoldInput">3. Frase en dorado</label>
+    <input id="phraseGoldInput" type="text" value="una nueva historia.">
+
+    <label for="locationInput">4. Ubicación</label>
+    <input id="locationInput" type="text" value="CALI, COLOMBIA">
+
+    <label for="flagInput">5. Bandera</label>
+    <input id="flagInput" type="text" value="🇨🇴" maxlength="8">
+
+    <button id="downloadBtn">Abrir historia para guardar</button>
+
+    <div class="note">
+      En iPhone: toca “Elegir foto de Fotos”, elige la imagen desde Fotos,
+      espera “✓ Foto cargada correctamente” y pulsa “Abrir historia para guardar”. Se abrirá la historia final;
+      mantén pulsada la imagen y elige “Guardar en Fotos”.
+      No se modifica ni retoca la fotografía.
+    </div>
+  </section>
+
+  <main class="story" id="story">
+    <img id="photo" class="photo" alt="" style="display:block;">
+    <img class="brand-logo" src="data:image/png;base64,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" alt="Daymon Bull DBM">
+    <div class="gradient"></div>
+
+    <div class="content">
+      <div class="phrase" id="phrase">
+        <span id="phraseWhite">Un nuevo hogar,</span><br>
+        <span class="gold" id="phraseGold">una nueva historia.</span>
+      </div>
+
+      <div class="divider">
+        <span class="paw">🐾</span>
+      </div>
+
+      <div class="location">
+        <span class="pin" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2.5a7.5 7.5 0 0 0-7.5 7.5c0 5.3 7.5 11.5 7.5 11.5S19.5 15.3 19.5 10A7.5 7.5 0 0 0 12 2.5Zm0 10.5a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
+          </svg>
+        </span>
+        <span id="location">CALI, COLOMBIA</span>
+        <span class="flag" id="flag">🇨🇴</span>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<script>
+const photoInput = document.getElementById('photoInput');
+const photo = document.getElementById('photo');
+
+const phraseWhiteInput = document.getElementById('phraseWhiteInput');
+const phraseGoldInput = document.getElementById('phraseGoldInput');
+const phraseWhite = document.getElementById('phraseWhite');
+const phraseGold = document.getElementById('phraseGold');
+
+const locationInput = document.getElementById('locationInput');
+const locationEl = document.getElementById('location');
+
+const flagInput = document.getElementById('flagInput');
+const flagEl = document.getElementById('flag');
+
+function updatePhrase(){
+  phraseWhite.textContent =
+    phraseWhiteInput.value.trim() || 'Un nuevo hogar,';
+  phraseGold.textContent =
+    phraseGoldInput.value.trim() || 'una nueva historia.';
+}
+
+function updateLocation(){
+  locationEl.textContent =
+    locationInput.value.trim().toUpperCase() || 'CALI, COLOMBIA';
+}
+
+function updateFlag(){
+  flagEl.textContent = flagInput.value.trim() || '🇨🇴';
+}
+
+document.getElementById('choosePhotoBtn').addEventListener('click', function(){
+  photoInput.click();
+});
+
+photoInput.addEventListener('change', function(e) {
+  const file = e.target && e.target.files && e.target.files.length
+    ? e.target.files[0]
+    : null;
+
+  const status = document.getElementById('photoStatus');
+
+  if (!file) {
+    status.textContent = 'No se seleccionó ninguna foto.';
+    status.style.color = '#ff9b9b';
+    return;
+  }
+
+  if (!file.type || !file.type.startsWith('image/')) {
+    status.textContent = 'El archivo seleccionado no es una imagen.';
+    status.style.color = '#ff9b9b';
+    return;
+  }
+
+  // Revoke the previous object URL if one exists.
+  if (photo.dataset.objectUrl) {
+    URL.revokeObjectURL(photo.dataset.objectUrl);
+  }
+
+  const objectUrl = URL.createObjectURL(file);
+  photo.dataset.objectUrl = objectUrl;
+  photo.dataset.ready = 'false';
+
+  status.textContent = 'Cargando foto...';
+  status.style.color = '#aaa';
+
+  photo.onload = function() {
+    photo.dataset.ready = 'true';
+    status.textContent = '✓ Foto cargada correctamente';
+    status.style.color = '#C99A2E';
+  };
+
+  photo.onerror = function() {
+    photo.dataset.ready = 'false';
+    status.textContent = 'No se pudo mostrar esta foto. Intenta seleccionar otra desde Fotos.';
+    status.style.color = '#ff9b9b';
+  };
+
+  photo.src = objectUrl;
+});
+
+phraseWhiteInput.addEventListener('input', updatePhrase);
+phraseGoldInput.addEventListener('input', updatePhrase);
+locationInput.addEventListener('input', updateLocation);
+flagInput.addEventListener('input', updateFlag);
+
+function drawStoryToCanvas() {
+  const img = document.getElementById('photo');
+
+  if (!img.src || !img.naturalWidth || img.dataset.ready !== 'true') {
+    throw new Error('NO_PHOTO');
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080;
+  canvas.height = 1920;
+  const ctx = canvas.getContext('2d');
+
+  const iw = img.naturalWidth;
+  const ih = img.naturalHeight;
+  const targetRatio = 1080 / 1920;
+  const imageRatio = iw / ih;
+
+  let sx, sy, sw, sh;
+
+  if (imageRatio > targetRatio) {
+    sh = ih;
+    sw = ih * targetRatio;
+    sx = (iw - sw) / 2;
+    sy = 0;
+  } else {
+    sw = iw;
+    sh = iw / targetRatio;
+    sx = 0;
+    sy = Math.max(0, (ih - sh) / 2);
+  }
+
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, 1080, 1920);
+
+  const gold = '#C99A2E';
+  const white = '#F7F5F0';
+
+  // Fixed gradient.
+  const g = ctx.createLinearGradient(0, 1075, 0, 1920);
+  g.addColorStop(0, 'rgba(5,5,5,0)');
+  g.addColorStop(.12, 'rgba(5,5,5,.12)');
+  g.addColorStop(.28, 'rgba(5,5,5,.60)');
+  g.addColorStop(.40, 'rgba(5,5,5,.92)');
+  g.addColorStop(.52, 'rgba(5,5,5,1)');
+  g.addColorStop(1, '#050505');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 1080, 1920);
+
+  // Original embedded DBM logo.
+  const logo = document.querySelector('.brand-logo');
+  if (logo && logo.naturalWidth) {
+    const logoW = 136;
+    const logoH = logo.naturalHeight * (logoW / logo.naturalWidth);
+    ctx.drawImage(logo, 95, 51, logoW, logoH);
+  }
+
+  // Text.
+  const x = 95;
+  const phraseY = 1580;
+  ctx.textBaseline = 'alphabetic';
+  ctx.font = '500 78px Georgia, "Times New Roman", serif';
+
+  ctx.fillStyle = white;
+  ctx.fillText(phraseWhiteInput.value.trim() || 'Un nuevo hogar,', x, phraseY);
+
+  ctx.fillStyle = gold;
+  ctx.fillText(phraseGoldInput.value.trim() || 'una nueva historia.', x, phraseY + 84);
+
+  // Divider + paw.
+  const dividerY = phraseY + 133;
+  const dividerLeft = 95;
+  const dividerRight = 735;
+  const center = (dividerLeft + dividerRight) / 2;
+
+  ctx.strokeStyle = gold;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(dividerLeft, dividerY);
+  ctx.lineTo(center - 28, dividerY);
+  ctx.moveTo(center + 28, dividerY);
+  ctx.lineTo(dividerRight, dividerY);
+  ctx.stroke();
+
+  ctx.save();
+  ctx.translate(center, dividerY);
+  ctx.fillStyle = gold;
+  ctx.beginPath();
+  ctx.ellipse(-15, 9, 17, 14, 0, 0, Math.PI*2);
+  ctx.ellipse(-22, -9, 6, 9, -0.2, 0, Math.PI*2);
+  ctx.ellipse(-8, -14, 6, 9, 0.05, 0, Math.PI*2);
+  ctx.ellipse(7, -14, 6, 9, -0.05, 0, Math.PI*2);
+  ctx.ellipse(20, -8, 6, 9, 0.2, 0, Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+
+  // Location + dynamic flag.
+  const locY = dividerY + 75;
+  const loc = (locationInput.value.trim() || 'CALI, COLOMBIA').toUpperCase();
+  const flag = flagInput.value.trim() || '🇨🇴';
+
+  ctx.fillStyle = gold;
+  ctx.beginPath();
+  ctx.arc(111, locY - 7, 17, 0, Math.PI * 2);
+  ctx.moveTo(111, locY + 28);
+  ctx.lineTo(94, locY + 2);
+  ctx.lineTo(128, locY + 2);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#050505';
+  ctx.beginPath();
+  ctx.arc(111, locY - 7, 6, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.font = '500 36px Arial, sans-serif';
+  ctx.fillStyle = white;
+  ctx.fillText(loc, 151, locY + 5);
+
+  ctx.font = '32px "Apple Color Emoji","Segoe UI Emoji",sans-serif';
+  ctx.fillText(flag, 151 + ctx.measureText(loc) + 18, locY + 7);
+
+  return canvas;
+}
+
+function saveForIPhone() {
+  if (!photo.src || !photo.naturalWidth || photo.dataset.ready !== 'true') {
+    alert('Primero selecciona una foto y espera a que aparezca “✓ Foto cargada correctamente”.');
+    return;
+  }
+
+  // Open a blank tab synchronously while Safari still considers this a user action.
+  // This avoids Safari blocking the generated image as a popup.
+  const newTab = window.open('', '_blank');
+
+  let canvas;
+  try {
+    canvas = drawStoryToCanvas();
+  } catch (e) {
+    if (newTab) newTab.close();
+    alert('No se pudo generar la historia.');
+    return;
+  }
+
+  const dataUrl = canvas.toDataURL('image/png');
+
+  if (newTab) {
+    newTab.document.open();
+    newTab.document.write(
+      '<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<title>Daymon Bull</title><style>html,body{margin:0;background:#000;min-height:100%;display:flex;align-items:center;justify-content:center}img{width:100%;height:auto;display:block}</style></head>' +
+      '<body><img src="' + dataUrl + '" alt="Historia Daymon Bull"></body></html>'
+    );
+    newTab.document.close();
+  } else {
+    // If Safari refuses a popup, replace the current page with the PNG.
+    // The browser back button returns to the template.
+    window.location.href = dataUrl;
+  }
+}
+
+document.getElementById('downloadBtn').addEventListener('click', function() {
+  saveForIPhone();
+});
+updatePhrase();
+updateLocation();
+updateFlag();
+</script>
+
+</body>
+</html>
