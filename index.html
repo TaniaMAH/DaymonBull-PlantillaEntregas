@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#050505">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Daymon Bull Entregas">
 <title>Daymon Bull — Plantilla de entregas</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600&display=swap');
@@ -39,25 +42,81 @@
 
   .controls{
     width:330px;
-    background:#111;
-    border:1px solid #2a2a2a;
-    border-radius:16px;
+    background:linear-gradient(145deg,#111 0%,#090909 100%);
+    border:1px solid rgba(201,154,46,.30);
+    border-radius:18px;
     padding:22px;
     position:sticky;
     top:20px;
+    box-shadow:0 18px 50px rgba(0,0,0,.35);
   }
 
-  .controls h1{
-    margin:0 0 6px;
-    font-size:18px;
+  .editor-brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding-bottom:16px;
+    margin-bottom:16px;
+    border-bottom:2px solid rgba(201,154,46,.22);
+  }
+
+  .editor-brand img{
+    width:56px;
+    height:56px;
+    object-fit:contain;
+    flex:none;
+  }
+
+  .editor-kicker{
+    margin:0 0 3px;
+    color:var(--gold);
+    font-size:10px;
     font-weight:600;
+    letter-spacing:3px;
+    text-transform:uppercase;
   }
 
-  .controls p{
+  .editor-title{
+    margin:0;
+    font-family:"Cormorant Garamond",Georgia,serif;
+    font-size:25px;
+    line-height:1;
+    font-weight:600;
+    color:var(--white);
+  }
+
+  .editor-subtitle{
+    margin:5px 0 0;
+    color:#858585;
+    font-size:10px;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+  }
+
+  .editor-intro{
     margin:0 0 20px;
     color:#aaa;
-    font-size:12px;
-    line-height:1.5;
+    font-size:11px;
+    line-height:1.55;
+  }
+
+  .section-label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:18px 0 8px;
+    color:#d8d8d8;
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+  }
+
+  .section-label::before{
+    content:"";
+    width:18px;
+    height:2px;
+    background:var(--gold);
   }
 
   label{
@@ -86,18 +145,62 @@
   }
 
   .native-file-input{
-    display:block;
+    position:absolute;
+    width:1px;
+    height:2px;
+    padding:0;
+    margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
+
+  .file-button{
+    display:flex;
+    align-items:center;
+    justify-content:center;
     width:100%;
-    min-height:48px;
-    padding:10px;
+    min-height:46px;
+    padding:11px 14px;
+    border:1px solid rgba(201,154,46,.55);
+    border-radius:10px;
+    background:#161616;
+    color:var(--white);
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+
+  .file-button:active{background:#202020}
+
+  .photo-name{
+    margin-top:7px;
+    color:#777;
+    font-size:10px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+
+  select{
+    width:100%;
     border:1px solid #383838;
-    border-radius:9px;
     background:#191919;
     color:#fff;
-    font-size:14px;
-    cursor:pointer;
-    -webkit-appearance:auto;
-    appearance:auto;
+    border-radius:9px;
+    padding:11px 12px;
+    font:inherit;
+    font-size:13px;
+  }
+
+  .mini-divider{
+    height:2px;
+    background:linear-gradient(90deg,transparent,rgba(201,154,46,.35),transparent);
+    margin:20px 0;
   }
 
   button{
@@ -120,12 +223,6 @@
     cursor:wait;
   }
 
-  .secondary-button{
-    margin-top:8px;
-    background:#191919;
-    color:#fff;
-    border:1px solid #383838;
-  }
 
   .photo-status{
     margin-top:8px;
@@ -147,6 +244,7 @@
   /* ===== PLANTILLA 1080 × 1920 ===== */
   .story{
     position:relative;
+    contain:layout paint;
     width:min(54vh, 540px);
     aspect-ratio:9/16;
     overflow:hidden;
@@ -164,11 +262,12 @@
   }
 
   /* Logo original DBM: fijo en la esquina superior izquierda. */
-  .brand-logo{
+  .brand-logo{left: 7.8%;
+
     position:absolute;
     z-index:3;
     top:2.65%;
-    left:8.8%;
+    
     width:74px;
     height:auto;
     display:block;
@@ -225,24 +324,35 @@
   .divider::before,
   .divider::after{
     content:"";
-    height:1px;
+    height:2px;
     background:var(--gold);
     flex:1;
     opacity:.9;
   }
 
   .paw{
-    color:var(--gold);
-    font-size:18px;
-    line-height:1;
+    width:40px;
+    height:40px;
+    display:block;
+    flex:none;
+    position:relative;
     transform:translateY(-1px);
-    filter:grayscale(1) brightness(0) saturate(100%) invert(68%) sepia(48%) saturate(700%) hue-rotate(4deg) brightness(88%);
+  }
+
+  .paw img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
   }
 
   .location{
     display:flex;
     align-items:center;
+    justify-content:flex-start;
+    width:100%;
     gap:11px;
+    padding-left:0;
     font-family:Montserrat,Arial,sans-serif;
     font-size:clamp(13px,2vw,18px);
     line-height:1;
@@ -271,9 +381,34 @@
   }
 
   .flag{
-    font-size:22px;
-    line-height:1;
+    width:38px;
+    height:22px;
+    display:flex;
+    align-items:center;
+    flex:none;
   }
+
+  .flag-graphic{
+    width:34px;
+    height:20px;
+    display:block;
+    border-radius:2px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.16);
+    overflow:hidden;
+    position:relative;
+  }
+
+  .flag-graphic svg{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+  .flag-graphic.US{background:repeating-linear-gradient(to bottom,#B22234 0 7.69%,#fff 7.69% 15.38%) !important}
+  .flag-graphic.US::before{content:"";position:absolute;left:0;top:0;width:45%;height:54%;background:#3C3B6E}
+  .flag-graphic.BR::before{content:"";position:absolute;left:8px;top:3px;width:18px;height:14px;background:#FFDF00;transform:rotate(45deg)}
+  .flag-graphic.BR::after{content:"";position:absolute;left:12px;top:6px;width:10px;height:10px;border-radius:50%;background:#002776}
+  .flag-graphic.PA::before{content:"";position:absolute;left:0;top:0;width:50%;height:50%;background:#fff}
+  .flag-graphic.PA::after{content:"";position:absolute;right:0;bottom:0;width:50%;height:50%;background:#005293}
 
   @media(max-width:850px){
     body{
@@ -297,8 +432,8 @@
       width:min(100%,540px);
       height:auto;
     }
-    .controls h1{font-size:17px}
-    .controls p{font-size:11px}
+    .editor-title{font-size:23px}
+    .editor-intro{font-size:10.5px}
     input[type="text"],
     input[type="file"],
     button{
@@ -313,36 +448,57 @@
 <div class="workspace">
 
   <section class="controls">
-    <h1>Plantilla de entregas · Daymon Bull</h1>
-    <p>
-      La plantilla mantiene fijos el degradado, la posición, los tamaños,
-      la tipografía y la paleta. Solo cambia la fotografía, la frase y la ubicación.
+    <div class="editor-brand">
+      <img src="data:image/png;base64,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" alt="Daymon Bull">
+      <div>
+        <div class="editor-kicker">DAYMON BULL</div>
+        <h1 class="editor-title">ENTREGAS</h1>
+        <div class="editor-subtitle">Historias de nuevos hogares</div>
+      </div>
+    </div>
+
+    <p class="editor-intro">
+      Crea cada historia manteniendo intacta la identidad visual de Daymon Bull.
+      La fotografía no se retoca: solo se integra a la plantilla.
     </p>
 
-    <label for="photoInput">1. Incrustar fotografía</label>
+    <div class="section-label">Fotografía</div>
     <input id="photoInput" class="native-file-input" type="file" accept="image/*">
-    <button type="button" id="choosePhotoBtn" class="secondary-button">Elegir foto</button>
+    <label class="file-button" for="photoInput">Elegir foto de Fotos</label>
     <div id="photoStatus" class="photo-status">Todavía no has seleccionado una foto.</div>
+    <div id="photoName" class="photo-name"></div>
 
-    <label for="phraseWhiteInput">2. Frase en blanco</label>
+    <div class="section-label">Frase</div>
+    <label for="phraseWhiteInput">Línea blanca</label>
     <input id="phraseWhiteInput" type="text" value="Un nuevo hogar,">
-
-    <label for="phraseGoldInput">3. Frase en dorado</label>
+    <label for="phraseGoldInput">Línea dorada</label>
     <input id="phraseGoldInput" type="text" value="una nueva historia.">
 
-    <label for="locationInput">4. Ubicación</label>
+    <div class="section-label">Ubicación</div>
     <input id="locationInput" type="text" value="CALI, COLOMBIA">
 
-    <label for="flagInput">5. Bandera</label>
-    <input id="flagInput" type="text" value="🇨🇴" maxlength="8">
+    <label for="countryInput">País de la bandera</label>
+    <select id="countryInput">
+      <option value="CO" selected>🇨🇴 Colombia</option>
+      <option value="MX">🇲🇽 México</option>
+      <option value="US">🇺🇸 Estados Unidos</option>
+      <option value="ES">🇪🇸 España</option>
+      <option value="AR">🇦🇷 Argentina</option>
+      <option value="CL">🇨🇱 Chile</option>
+      <option value="PE">🇵🇪 Perú</option>
+      <option value="BR">🇧🇷 Brasil</option>
+      <option value="EC">🇪🇨 Ecuador</option>
+      <option value="VE">🇻🇪 Venezuela</option>
+      <option value="PA">🇵🇦 Panamá</option>
+      <option value="CR">🇨🇷 Costa Rica</option>
+    </select>
 
-    <button id="downloadBtn">Abrir historia para guardar</button>
+    <div class="mini-divider"></div>
+    <button id="downloadBtn" type="button">Abrir historia para guardar</button>
 
     <div class="note">
-      En iPhone: toca “Elegir foto de Fotos”, elige la imagen desde Fotos,
-      espera “✓ Foto cargada correctamente” y pulsa “Abrir historia para guardar”. Se abrirá la historia final;
-      mantén pulsada la imagen y elige “Guardar en Fotos”.
-      No se modifica ni retoca la fotografía.
+      En iPhone, “Elegir foto de Fotos” abre directamente el selector de Fotos.
+      La historia final se genera sin filtros ni retoques sobre la fotografía.
     </div>
   </section>
 
@@ -358,7 +514,9 @@
       </div>
 
       <div class="divider">
-        <span class="paw">🐾</span>
+        <span class="paw" aria-hidden="true">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJIAAAB1CAYAAAClOri0AAADMElEQVR42u3dTXLbMAyGYYvj83SbG+VQvVG3uVC78oybRrVikyIBPN82GQkAX36EqB9vl+D69fPH772/vb1/bGI9R1s2eFYbqEixlgHpmUGZNUiRYu2hVgminsfJEmspkHoXdOQARYq1FEijCjniuJFiLQXS6AL2PH6kWEuBdFbhepwnUqylQDq7YK+cL1KspUCaVahnzhsp1tG6jk4s+o4tHdN25qx4BNUKM+0o+JFiXdKRevQTXKqwI42YgfdArbTuR3DOng7aY2JfZ0F0Oy53mt+U3//fs+OxzYJode0VdMV6fI51xg3jK4jqOdCIfraBCEQ9jruB6NwlI9tS/9CRiL4ziRo3oh4wNRBRD5gsbQeLZpIdvGpTKHrFlTgSdYEJSNRvabOs0auuxJGob7NNBCSavrw1/RFxJAISAYnonz4JSMSRRuv+YS4vKQCJgERAIiDR1z2RPglINBoks4w40onLmuUNSASktdyIK+3XoykMcaQJbsSVgEQD5Wsbdw7znfxvjlT9CdNbHYBEXUBqK677b+8fmx4keI80ewA9AxRnct3H0yIUEETr16CtFPjeeSvD9Dn3ldqPQ5f/Zwf86HwVYVp1Yn11/rbC4B09T5UmPGKe03/A5dWCZdmyeKYOM3Lfi3OZ3yJ5VRGB6pH/mXn/L94ps6C3bUd2pSgwPYpzqd9rq7q0rQ7Tkfi20YM5smnMdEtnVZiOxhX2CijjfcFek25G+7GBKCdMZ7cf1wtdKkA5uv0I50gVHnWJuOnaQCTPciARkLhR8nw5EgGJgGRZS5Y3R6IaIFV/RSpK/hyJgERAIiARBQPJtwji1IEjEZAISAQkIiARkAhIBCQiIBGQCEjd5PuRcerAkQhIBCQCElFAkKo33FHy50hUB6SqrhQpb45EQCIgWd6S5cuRqB5IVVzJNyQVuWx+ljaqC1JWV4qcV1N0+ZRf2rLAlCGPZhDED6Tgg5FpeU5z1RZtULL1eKku/6MMTsarznT7SKsPUtati9S7xCt96Sz7jnzqne1VBq/CPcIyj2bMcKdKj76Ue4T1DKAqPhpc+g2NnlBVf9vFu/VPguW7BH/rD2TR2i5iUZgVAAAAAElFTkSuQmCC" alt="">
+        </span>
       </div>
 
       <div class="location">
@@ -387,9 +545,182 @@ const phraseGold = document.getElementById('phraseGold');
 const locationInput = document.getElementById('locationInput');
 const locationEl = document.getElementById('location');
 
-const flagInput = document.getElementById('flagInput');
+const countryInput = document.getElementById('countryInput');
 const flagEl = document.getElementById('flag');
+const photoStatus = document.getElementById('photoStatus');
+const photoName = document.getElementById('photoName');
+const pawSVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 361 361\">\n<g fill=\"#C99A2E\">\n<path d=\"M 325.00,218.00 Q 323.00,216.00 320.50,215.00 Q 318.00,214.00 310.50,215.00 Q 303.00,216.00 297.00,221.00 Q 291.00,226.00 289.50,229.50 Q 288.00,233.00 288.50,237.00 Q 289.00,241.00 291.50,243.50 Q 294.00,246.00 297.50,247.00 Q 301.00,248.00 308.00,246.50 Q 315.00,245.00 319.50,241.50 Q 324.00,238.00 326.00,234.50 Q 328.00,231.00 327.50,225.50 Q 327.00,220.00 325.00,218.00 Z\"/><path d=\"M 193.50,200.00 Q 191.00,203.00 189.00,208.00 Q 187.00,213.00 187.50,219.50 Q 188.00,226.00 192.00,232.00 Q 196.00,238.00 200.50,240.50 Q 205.00,243.00 210.00,243.50 Q 215.00,244.00 217.50,245.50 Q 220.00,247.00 224.50,256.50 Q 229.00,266.00 234.50,270.00 Q 240.00,274.00 249.50,274.00 Q 259.00,274.00 265.00,269.50 Q 271.00,265.00 273.50,260.00 Q 276.00,255.00 276.00,249.00 Q 276.00,243.00 274.50,238.50 Q 273.00,234.00 274.00,220.50 Q 275.00,207.00 273.00,202.50 Q 271.00,198.00 268.00,195.00 Q 265.00,192.00 259.50,189.50 Q 254.00,187.00 249.00,187.00 Q 244.00,187.00 236.50,189.50 Q 229.00,192.00 218.50,191.50 Q 208.00,191.00 202.00,194.00 Q 196.00,197.00 193.50,200.00 Z\"/><path d=\"M 313.00,171.00 Q 311.00,170.00 307.00,170.00 Q 303.00,170.00 297.50,172.50 Q 292.00,175.00 289.00,178.00 Q 286.00,181.00 284.00,185.00 Q 282.00,189.00 282.00,193.00 Q 282.00,197.00 283.00,199.00 Q 284.00,201.00 287.50,203.00 Q 291.00,205.00 295.50,205.00 Q 300.00,205.00 306.00,202.00 Q 312.00,199.00 316.00,193.00 Q 320.00,187.00 320.00,182.50 Q 320.00,178.00 317.50,175.00 Q 315.00,172.00 313.00,171.00 Z\"/><path d=\"M 35.00,152.00 Q 33.00,154.00 32.00,157.00 Q 31.00,160.00 32.00,164.50 Q 33.00,169.00 34.50,171.50 Q 36.00,174.00 38.50,176.50 Q 41.00,179.00 45.50,181.50 Q 50.00,184.00 54.00,184.50 Q 58.00,185.00 61.00,184.00 Q 64.00,183.00 66.00,181.00 Q 68.00,179.00 68.50,173.50 Q 69.00,168.00 66.00,162.50 Q 63.00,157.00 60.00,154.50 Q 57.00,152.00 53.50,150.50 Q 50.00,149.00 46.50,148.50 Q 43.00,148.00 40.00,149.00 Q 37.00,150.00 35.00,152.00 Z\"/><path d=\"M 270.50,139.00 Q 266.00,139.00 262.00,141.50 Q 258.00,144.00 256.00,146.50 Q 254.00,149.00 252.00,154.00 Q 250.00,159.00 250.00,163.50 Q 250.00,168.00 253.00,172.50 Q 256.00,177.00 262.00,177.00 Q 268.00,177.00 273.50,172.50 Q 279.00,168.00 281.00,163.50 Q 283.00,159.00 283.00,153.50 Q 283.00,148.00 281.50,145.00 Q 280.00,142.00 277.50,140.50 Q 275.00,139.00 270.50,139.00 Z\"/><path d=\"M 227.00,137.00 Q 224.00,137.00 221.00,138.50 Q 218.00,140.00 213.50,146.00 Q 209.00,152.00 208.50,160.00 Q 208.00,168.00 209.00,170.50 Q 210.00,173.00 213.00,175.50 Q 216.00,178.00 220.00,178.00 Q 224.00,178.00 227.00,176.50 Q 230.00,175.00 233.00,171.50 Q 236.00,168.00 237.50,164.50 Q 239.00,161.00 239.50,156.00 Q 240.00,151.00 239.00,147.50 Q 238.00,144.00 236.00,141.50 Q 234.00,139.00 232.00,138.00 Q 230.00,137.00 227.00,137.00 Z\"/><path d=\"M 160.00,154.50 Q 155.00,151.00 145.00,149.00 Q 135.00,147.00 126.00,142.00 Q 117.00,137.00 111.50,137.00 Q 106.00,137.00 103.00,138.00 Q 100.00,139.00 95.00,143.00 Q 90.00,147.00 87.50,152.50 Q 85.00,158.00 84.50,166.50 Q 84.00,175.00 80.00,183.50 Q 76.00,192.00 76.00,198.00 Q 76.00,204.00 78.00,208.50 Q 80.00,213.00 83.50,216.50 Q 87.00,220.00 90.00,221.50 Q 93.00,223.00 101.00,223.50 Q 109.00,224.00 114.00,221.50 Q 119.00,219.00 124.50,211.50 Q 130.00,204.00 132.00,203.00 Q 134.00,202.00 142.50,202.00 Q 151.00,202.00 154.50,200.50 Q 158.00,199.00 162.00,195.50 Q 166.00,192.00 168.50,186.00 Q 171.00,180.00 170.50,173.50 Q 170.00,167.00 167.50,162.50 Q 165.00,158.00 160.00,154.50 Z\"/><path d=\"M 52.00,113.00 Q 49.00,117.00 49.50,123.00 Q 50.00,129.00 52.00,132.50 Q 54.00,136.00 60.50,140.50 Q 67.00,145.00 73.00,144.50 Q 79.00,144.00 81.50,140.50 Q 84.00,137.00 84.00,132.00 Q 84.00,127.00 82.50,123.50 Q 81.00,120.00 78.00,116.50 Q 75.00,113.00 71.50,111.00 Q 68.00,109.00 61.50,109.00 Q 55.00,109.00 52.00,113.00 Z\"/><path d=\"M 141.50,96.50 Q 137.00,100.00 135.50,104.50 Q 134.00,109.00 134.00,112.50 Q 134.00,116.00 136.00,122.00 Q 138.00,128.00 141.00,131.00 Q 144.00,134.00 148.50,135.00 Q 153.00,136.00 154.50,135.50 Q 156.00,135.00 159.50,131.00 Q 163.00,127.00 164.00,119.50 Q 165.00,112.00 163.00,106.50 Q 161.00,101.00 158.00,98.00 Q 155.00,95.00 150.50,94.00 Q 146.00,93.00 141.50,96.50 Z\"/><path d=\"M 97.00,87.50 Q 94.00,90.00 92.50,93.00 Q 91.00,96.00 91.50,103.50 Q 92.00,111.00 94.00,115.00 Q 96.00,119.00 98.50,121.50 Q 101.00,124.00 103.50,125.00 Q 106.00,126.00 109.50,126.00 Q 113.00,126.00 117.00,122.00 Q 121.00,118.00 121.50,110.50 Q 122.00,103.00 120.50,99.00 Q 119.00,95.00 116.00,91.50 Q 113.00,88.00 110.50,86.50 Q 108.00,85.00 104.00,85.00 Q 100.00,85.00 97.00,87.50 Z\"/>\n</g></svg>";
+const svgToDataURL = svg => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+const pawCanvasImage = new Image();
+pawCanvasImage.src = svgToDataURL(pawSVG);
+const pawPreviewImg = document.querySelector('.paw img');
+if (pawPreviewImg) pawPreviewImg.src = svgToDataURL(pawSVG);
 
+function flagSVG(code){
+  const common = 'xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 72"';
+
+  const flags = {
+    CO: `<svg ${common}>
+      <defs>
+        <linearGradient id="co" x2="0" y2="1"><stop stop-color="#FFD84A"/><stop offset="1" stop-color="#F4C400"/></linearGradient>
+        <filter id="shadow"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter>
+      </defs>
+      <g filter="url(#shadow)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#003893"/>
+        <path d="M1 8Q1 1 8 1H112Q119 1 119 8V36H1Z" fill="url(#co)"/>
+        <path d="M1 36H119V54H1Z" fill="#1647A0"/>
+        <path d="M1 54H119V64Q119 71 112 71H8Q1 71 1 64Z" fill="#D92B32"/>
+        <path d="M2 36H118" stroke="#fff" stroke-opacity=".12"/>
+      </g>
+    </svg>`,
+
+    VE: `<svg ${common}>
+      <defs>
+        <filter id="s"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter>
+      </defs>
+      <g filter="url(#s)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#0033A0"/>
+        <path d="M1 8Q1 1 8 1H112Q119 1 119 8V24H1Z" fill="#F7D117"/>
+        <path d="M1 48H119V64Q119 71 112 71H8Q1 71 1 64Z" fill="#CF142B"/>
+        <g fill="#fff">
+          <path d="M60 26l2 6h6l-4.9 3.5 1.9 6-5-3.6-5 3.6 1.9-6-4.9-3.5h6z"/>
+          <path d="M49 27l2 6h6l-4.9 3.5 1.9 6-5-3.6-5 3.6 1.9-6-4.9-3.5h6z"/>
+          <path d="M71 27l2 6h6l-4.9 3.5 1.9 6-5-3.6-5 3.6 1.9-6-4.9-3.5h6z"/>
+          <path d="M39 31l2 6h6l-4.9 3.5 1.9 6-5-3.6-5 3.6 1.9-6-4.9-3.5h6z"/>
+          <path d="M81 31l2 6h6l-4.9 3.5 1.9 6-5-3.6-5 3.6 1.9-6-4.9-3.5h6z"/>
+          <path d="M46 39l2 6h6l-4.9 3.5 1.9 6-5-3.6-5 3.6 1.9-6-4.9-3.5h6z"/>
+          <path d="M60 40l2 6h6l-4.9 3.5 1.9 6-5-3.6-5 3.6 1.9-6-4.9-3.5h6z"/>
+          <path d="M74 39l2 6h6l-4.9 3.5 1.9 6-5-3.6-5 3.6 1.9-6-4.9-3.5h6z"/>
+        </g>
+      </g>
+    </svg>`,
+
+    CR: `<svg ${common}>
+      <defs><filter id="crs"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#crs)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#002B7F"/>
+        <rect x="1" y="11" width="118" height="50" fill="#fff"/>
+        <rect x="1" y="21" width="118" height="30" fill="#CE1126"/>
+        <circle cx="24" cy="36" r="8" fill="#fff" opacity=".95"/>
+        <path d="M24 29l2.1 4.7 5.1.5-3.9 3.4 1.2 5-4.5-2.7-4.5 2.7 1.2-5-3.9-3.4 5.1-.5z" fill="#002B7F"/>
+      </g>
+    </svg>`,
+
+    MX: `<svg ${common}>
+      <defs><filter id="mxs"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#mxs)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#fff"/>
+        <path d="M1 8Q1 1 8 1H40V71H8Q1 71 1 64Z" fill="#006847"/>
+        <path d="M80 1H112Q119 1 119 8V64Q119 71 112 71H80Z" fill="#CE1126"/>
+        <circle cx="60" cy="36" r="7" fill="#9B7A3C"/>
+        <path d="M53 36h14M60 29v14" stroke="#006847" stroke-width="1.8"/>
+        <path d="M56 31q4-4 8 0" fill="none" stroke="#006847" stroke-width="1.4"/>
+      </g>
+    </svg>`,
+
+    US: `<svg ${common}>
+      <defs><filter id="uss"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#uss)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#fff"/>
+        <g fill="#B22234">
+          <rect x="1" y="1" width="118" height="5.38"/><rect x="1" y="11.76" width="118" height="5.38"/>
+          <rect x="1" y="22.52" width="118" height="5.38"/><rect x="1" y="33.28" width="118" height="5.38"/>
+          <rect x="1" y="44.04" width="118" height="5.38"/><rect x="1" y="54.8" width="118" height="5.38"/>
+          <rect x="1" y="65.56" width="118" height="5.44"/>
+        </g>
+        <path d="M1 1H53V39H1Z" fill="#3C3B6E"/>
+        <g fill="#fff" font-family="Arial" font-size="6" text-anchor="middle">
+          <text x="8" y="10">★</text><text x="18" y="10">★</text><text x="28" y="10">★</text><text x="38" y="10">★</text><text x="48" y="10">★</text>
+          <text x="13" y="19">★</text><text x="23" y="19">★</text><text x="33" y="19">★</text><text x="43" y="19">★</text>
+          <text x="8" y="28">★</text><text x="18" y="28">★</text><text x="28" y="28">★</text><text x="38" y="28">★</text><text x="48" y="28">★</text>
+        </g>
+      </g>
+    </svg>`,
+
+    ES: `<svg ${common}>
+      <defs><filter id="ess"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#ess)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#AA151B"/>
+        <rect x="1" y="18" width="118" height="36" fill="#F1BF00"/>
+        <path d="M28 27h8v18h-8z" fill="#AA151B" opacity=".55"/>
+        <circle cx="31" cy="36" r="3" fill="#AA151B" opacity=".6"/>
+      </g>
+    </svg>`,
+
+    AR: `<svg ${common}>
+      <defs><filter id="ars"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#ars)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#74ACDF"/>
+        <rect x="1" y="24" width="118" height="24" fill="#fff"/>
+        <circle cx="60" cy="36" r="6" fill="#F6B40E"/>
+        <circle cx="60" cy="36" r="2.2" fill="#C9A227"/>
+      </g>
+    </svg>`,
+
+    CL: `<svg ${common}>
+      <defs><filter id="cls"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#cls)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#D52B1E"/>
+        <rect x="1" y="1" width="118" height="36" fill="#fff"/>
+        <rect x="1" y="1" width="42" height="36" fill="#0039A6"/>
+        <path d="M22 8l2.2 6.8h7.2l-5.8 4.2 2.2 6.8-5.8-4.1-5.8 4.1 2.2-6.8-5.8-4.2h7.2z" fill="#fff"/>
+      </g>
+    </svg>`,
+
+    PE: `<svg ${common}>
+      <defs><filter id="pes"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#pes)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#fff"/>
+        <path d="M1 8Q1 1 8 1H40V71H8Q1 71 1 64Z" fill="#D91023"/>
+        <path d="M80 1H112Q119 1 119 8V64Q119 71 112 71H80Z" fill="#D91023"/>
+      </g>
+    </svg>`,
+
+    BR: `<svg ${common}>
+      <defs><filter id="brs"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#brs)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#009C3B"/>
+        <path d="M60 6L114 36 60 66 6 36Z" fill="#FFDF00"/>
+        <circle cx="60" cy="36" r="18" fill="#002776"/>
+        <path d="M43 30Q60 22 77 30" fill="none" stroke="#fff" stroke-width="3"/>
+        <circle cx="60" cy="36" r="3" fill="#fff" opacity=".5"/>
+      </g>
+    </svg>`,
+
+    EC: `<svg ${common}>
+      <defs><filter id="ecs"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#ecs)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#003893"/>
+        <rect x="1" y="1" width="118" height="36" fill="#FCD116"/>
+        <rect x="1" y="36" width="118" height="18" fill="#003893"/>
+        <rect x="1" y="54" width="118" height="18" fill="#CE1126"/>
+        <circle cx="60" cy="36" r="7" fill="#8B6B3F"/>
+        <path d="M53 36h14M60 29v14" stroke="#fff" stroke-width="1.5"/>
+      </g>
+    </svg>`,
+
+    PA: `<svg ${common}>
+      <defs><filter id="pas"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity=".28"/></filter></defs>
+      <g filter="url(#pas)">
+        <rect x="1" y="1" width="118" height="70" rx="7" fill="#fff"/>
+        <rect x="60" y="1" width="59" height="35" fill="#D21034"/>
+        <rect y="36" width="59" height="35" fill="#005293"/>
+        <path d="M89 10l2 6h6l-5 4 2 6-5-3.5-5 3.5 2-6-5-4h6z" fill="#005293"/>
+        <path d="M30 45l2 6h6l-5 4 2 6-5-3.5-5 3.5 2-6-5-4h6z" fill="#D21034"/>
+      </g>
+    </svg>`
+  };
+
+  return flags[code] || flags.CO;
+}
+
+function renderPreviewFlag(code){
+  const wrap = document.createElement('span');
+  wrap.className = 'flag-graphic';
+  wrap.setAttribute('aria-hidden','true');
+  wrap.innerHTML = flagSVG(code);
+  flagEl.appendChild(wrap);
+}
 function updatePhrase(){
   phraseWhite.textContent =
     phraseWhiteInput.value.trim() || 'Un nuevo hogar,';
@@ -403,65 +734,48 @@ function updateLocation(){
 }
 
 function updateFlag(){
-  flagEl.textContent = flagInput.value.trim() || '🇨🇴';
+  flagEl.dataset.code = countryInput.value;
+  flagEl.innerHTML = '';
+  renderPreviewFlag(countryInput.value);
 }
 
-document.getElementById('choosePhotoBtn').addEventListener('click', function(){
-  photoInput.click();
-});
-
 photoInput.addEventListener('change', function(e) {
-  const file = e.target && e.target.files && e.target.files.length
-    ? e.target.files[0]
-    : null;
-
-  const status = document.getElementById('photoStatus');
-
-  if (!file) {
-    status.textContent = 'No se seleccionó ninguna foto.';
-    status.style.color = '#ff9b9b';
-    return;
-  }
+  const file = e.target && e.target.files && e.target.files.length ? e.target.files[0] : null;
+  if (!file) return;
 
   if (!file.type || !file.type.startsWith('image/')) {
-    status.textContent = 'El archivo seleccionado no es una imagen.';
-    status.style.color = '#ff9b9b';
+    photoStatus.textContent = 'El archivo seleccionado no es una imagen.';
+    photoStatus.style.color = '#ff9b9b';
     return;
   }
 
-  // Revoke the previous object URL if one exists.
-  if (photo.dataset.objectUrl) {
-    URL.revokeObjectURL(photo.dataset.objectUrl);
-  }
-
+  if (photo.dataset.objectUrl) URL.revokeObjectURL(photo.dataset.objectUrl);
   const objectUrl = URL.createObjectURL(file);
   photo.dataset.objectUrl = objectUrl;
   photo.dataset.ready = 'false';
+  photoStatus.textContent = 'Cargando foto...';
+  photoStatus.style.color = '#aaa';
+  photoName.textContent = file.name;
 
-  status.textContent = 'Cargando foto...';
-  status.style.color = '#aaa';
-
-  photo.onload = function() {
+  photo.onload = function(){
     photo.dataset.ready = 'true';
-    status.textContent = '✓ Foto cargada correctamente';
-    status.style.color = '#C99A2E';
+    photoStatus.textContent = '✓ Foto cargada correctamente';
+    photoStatus.style.color = '#C99A2E';
   };
-
-  photo.onerror = function() {
+  photo.onerror = function(){
     photo.dataset.ready = 'false';
-    status.textContent = 'No se pudo mostrar esta foto. Intenta seleccionar otra desde Fotos.';
-    status.style.color = '#ff9b9b';
+    photoStatus.textContent = 'No se pudo mostrar esta foto.';
+    photoStatus.style.color = '#ff9b9b';
   };
-
   photo.src = objectUrl;
 });
 
 phraseWhiteInput.addEventListener('input', updatePhrase);
 phraseGoldInput.addEventListener('input', updatePhrase);
 locationInput.addEventListener('input', updateLocation);
-flagInput.addEventListener('input', updateFlag);
+countryInput.addEventListener('change', updateFlag);
 
-function drawStoryToCanvas() {
+async function drawStoryToCanvas() {
   const img = document.getElementById('photo');
 
   if (!img.src || !img.naturalWidth || img.dataset.ready !== 'true') {
@@ -497,13 +811,13 @@ function drawStoryToCanvas() {
   const gold = '#C99A2E';
   const white = '#F7F5F0';
 
-  // Fixed gradient.
-  const g = ctx.createLinearGradient(0, 1075, 0, 1920);
+  // Fixed gradient: shorter and softer toward the upper part of the photo.
+  const g = ctx.createLinearGradient(0, 1170, 0, 1920);
   g.addColorStop(0, 'rgba(5,5,5,0)');
-  g.addColorStop(.12, 'rgba(5,5,5,.12)');
-  g.addColorStop(.28, 'rgba(5,5,5,.60)');
-  g.addColorStop(.40, 'rgba(5,5,5,.92)');
-  g.addColorStop(.52, 'rgba(5,5,5,1)');
+  g.addColorStop(.12, 'rgba(5,5,5,.06)');
+  g.addColorStop(.32, 'rgba(5,5,5,.28)');
+  g.addColorStop(.50, 'rgba(5,5,5,.68)');
+  g.addColorStop(.67, 'rgba(5,5,5,.94)');
   g.addColorStop(1, '#050505');
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, 1080, 1920);
@@ -543,48 +857,63 @@ function drawStoryToCanvas() {
   ctx.lineTo(dividerRight, dividerY);
   ctx.stroke();
 
+  // Divider + paw: use the exact same embedded paw asset so Safari/iPhone
+  // does not depend on an emoji font when exporting the PNG.
+  await new Promise((resolve, reject) => {
+    if (pawCanvasImage.complete && pawCanvasImage.naturalWidth) return resolve();
+    pawCanvasImage.onload = resolve;
+    pawCanvasImage.onerror = reject;
+  });
+  ctx.drawImage(pawCanvasImage, center - 30, dividerY - 30, 60, 60);
+
+  // Location + dynamic flag, aligned to the same left edge as the text block.
+  const locY = dividerY + 75;
+  const loc = (locationInput.value.trim() || 'CALI, COLOMBIA').toUpperCase();
+  const code = countryInput.value || 'CO';
+
+  ctx.font = '500 36px Arial, sans-serif';
+  const locWidth = ctx.measureText(loc).width;
+  const flagWidth = 48;
+  const gapTextFlag = 22;
+  // Align the complete location block to the same left edge as the phrase (x=95).
+  // The pin/text geometry intentionally matches the working v13 composition.
+  const pinX = 111;
+  const textX = 151;
+  const flagX = textX + locWidth + gapTextFlag;
+
   ctx.save();
-  ctx.translate(center, dividerY);
+  ctx.translate(pinX, locY);
   ctx.fillStyle = gold;
   ctx.beginPath();
-  ctx.ellipse(-15, 9, 17, 14, 0, 0, Math.PI*2);
-  ctx.ellipse(-22, -9, 6, 9, -0.2, 0, Math.PI*2);
-  ctx.ellipse(-8, -14, 6, 9, 0.05, 0, Math.PI*2);
-  ctx.ellipse(7, -14, 6, 9, -0.05, 0, Math.PI*2);
-  ctx.ellipse(20, -8, 6, 9, 0.2, 0, Math.PI*2);
+  ctx.moveTo(0, 27);
+  ctx.bezierCurveTo(-4, 21, -18, 9, -18, -2);
+  ctx.arc(0, -2, 18, Math.PI, 0, false);
+  ctx.bezierCurveTo(18, 9, 4, 21, 0, 27);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = '#050505';
+  ctx.beginPath();
+  ctx.arc(0, -2, 6, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 
-  // Location + dynamic flag.
-  const locY = dividerY + 75;
-  const loc = (locationInput.value.trim() || 'CALI, COLOMBIA').toUpperCase();
-  const flag = flagInput.value.trim() || '🇨🇴';
-
-  ctx.fillStyle = gold;
-  ctx.beginPath();
-  ctx.arc(111, locY - 7, 17, 0, Math.PI * 2);
-  ctx.moveTo(111, locY + 28);
-  ctx.lineTo(94, locY + 2);
-  ctx.lineTo(128, locY + 2);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.fillStyle = '#050505';
-  ctx.beginPath();
-  ctx.arc(111, locY - 7, 6, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.font = '500 36px Arial, sans-serif';
+  ctx.textBaseline = 'middle';
   ctx.fillStyle = white;
-  ctx.fillText(loc, 151, locY + 5);
+  ctx.fillText(loc, textX, locY);
 
-  ctx.font = '32px "Apple Color Emoji","Segoe UI Emoji",sans-serif';
-  ctx.fillText(flag, 151 + ctx.measureText(loc) + 18, locY + 7);
+  const flagImage = new Image();
+  flagImage.src = svgToDataURL(flagSVG(code));
+  await new Promise((resolve, reject) => {
+    if (flagImage.complete && flagImage.naturalWidth) return resolve();
+    flagImage.onload = resolve;
+    flagImage.onerror = reject;
+  });
+  ctx.drawImage(flagImage, flagX, locY - 14, flagWidth, 28);
 
   return canvas;
 }
 
-function saveForIPhone() {
+async function saveForIPhone() {
   if (!photo.src || !photo.naturalWidth || photo.dataset.ready !== 'true') {
     alert('Primero selecciona una foto y espera a que aparezca “✓ Foto cargada correctamente”.');
     return;
@@ -596,7 +925,7 @@ function saveForIPhone() {
 
   let canvas;
   try {
-    canvas = drawStoryToCanvas();
+    canvas = await drawStoryToCanvas();
   } catch (e) {
     if (newTab) newTab.close();
     alert('No se pudo generar la historia.');
