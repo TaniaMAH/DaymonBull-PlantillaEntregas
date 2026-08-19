@@ -1,10 +1,21 @@
 {
   "name": "Daymon Bull · Entregas",
   "short_name": "Daymon Bull",
-  "description": "Plantilla para crear historias de entregas de Daymon Bull.",
+  "description": "Crea historias de entregas de Daymon Bull con fotografía, frase, ubicación y bandera.",
+  "id": "./",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "background_color": "#050505",
   "theme_color": "#050505",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "lang": "es-CO",
+  "categories": [
+    "photo",
+    "business"
+  ]
 }
